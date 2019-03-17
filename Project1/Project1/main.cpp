@@ -1,24 +1,37 @@
 #include <iostream>
 #include <string>
-
 #include "hash_table.h"
+
+
+
+const int upper = 126;
+
+const int lower = 33;
 
 int main()
 {
-	nwacc::hash_table<double,int> table(7);
+	nwacc::hash_table<char,double> table(7);
+	std::vector<char> characters;
+	for (auto counter=lower;counter<=upper;counter++)
+	{
+		characters.push_back(counter);
+	}
+	char random_char=' ';
+	int inserted = 0;
+	while (table.size() < 50 && characters.size() > 0)
+	{
+		auto value = characters.size() > 1? rand() % characters.size(): 0 ;
+		random_char = characters[value];
+		std::swap(characters[value], characters.back());
+		characters.pop_back();
+		table.insert(random_char, ((double)rand()*(lower - upper) / (double)upper - lower));
+		inserted++;		
+	}
+	table.print();
 
-	table.insert(1.0,std::rand());
-	table.insert(3.5, std::rand());
-	table.print();
-	table.insert(-9.0, std::rand());
-	table.print();
-	table.insert(5.3, std::rand());
-	table.print();
-	table.insert(3.2, std::rand());
-	table.print();
-	table.remove(1.0);
-	table.print();
-	std::cout << std::boolalpha << table.contains(3.5) << std::endl;
+	std::cout << table[random_char] << "---";
+	std::cout << (table[random_char] = 56) << std::endl;
 
+	system("pause");
 	return 0;
 }
