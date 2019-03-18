@@ -13,21 +13,39 @@ namespace nwacc {
 	{
 	public:
 		// note made this seven so we could see this work when printing. 
+		/**
+		 * initializes the array with the proper size;
+		 * 
+		 * \param size
+		 */
 		explicit hash_table(int size = 7) : array(next_prime(size))
 		{
 			this->make_empty();
 		}
-
+		/**
+		 * checks to see is the hashmap contains the given value
+		 * 
+		 * \param value
+		 * \return bool
+		 */
 		bool contains_value(const T & value) const
 		{
 			return this->is_active(this->find_value(value));
 		}
-
+		/**
+		  * checks to see is the hashmap contains the given value
+		 * 
+		 * \param key
+		 * \return bool 
+		 */
 		bool contains_key(const K & key)
 		{
 			return this->is_active(this->find_position(key));
 		}
-
+		/*!
+		 * empties out the map
+		 * 
+		 */
 		void make_empty()
 		{
 			this->current_size = 0;
@@ -36,7 +54,13 @@ namespace nwacc {
 				entry.type = kEmpty;
 			}
 		}
-
+		/**
+		 * inserts the given value into the map
+		 * 
+		 * \param value
+		 * \param key
+		 * \return bool
+		 */
 		bool insert(const T & value,const K & key)
 		{
 			auto current_position = this->find_position(key);
@@ -60,7 +84,13 @@ namespace nwacc {
 
 			return true;
 		}
-
+		/**
+		 * inserts the given value into the map
+		 *
+		 * \param value
+		 * \param key
+		 * \return bool
+		 */
 		 bool insert(T && value,K && key)
 		 {
 		 	auto current_position = this->find_position(key);
@@ -84,7 +114,12 @@ namespace nwacc {
 		
 		 	return true;
 		 }
-
+		 /**
+		  * removes a value from the map
+		  * 
+		  * \param value
+		  * \return bool
+		  */
 		bool remove(const T & value)
 		{
 			auto current_position = this->find_value(value);
@@ -98,7 +133,13 @@ namespace nwacc {
 				return true;
 			}
 		}
-
+		/**
+		 *removes the given key from the map
+		 * 
+		 * 
+		 * \param key
+		 * \return 
+		 */
 		bool remove(const K & key)
 		{
 			auto current_position = this->find_position(key);
@@ -112,14 +153,26 @@ namespace nwacc {
 				return true;
 			}
 		}
-
+		/**
+		 * returns the value stored with the given key
+		 * 
+		 * \param key
+		 * \return T
+		 */
 		T get(const K& key)
 		{
 			return contains_key(key)? this->array[this->find_position(key)].element: throw std::length_error("key does not exist");
 		}
-
+		/**
+		 * the differant states a node in the map and have
+		 * 
+		 */
 		enum entry_type { kActive, kEmpty, kDeleted };
-
+		/**
+		 * prints the map to the given out stream
+		 * 
+		 * \param out
+		 */
 		void print(std::ostream & out = std::cout)
 		{
 			for (auto entry : this->array)
@@ -131,16 +184,31 @@ namespace nwacc {
 			}
 			out << std::endl;
 		}
-
+		/**
+		 * returns a reference to the value stored with the key
+		 * 
+		 * \param key
+		 * \return T&
+		 */
 		T& operator[](const K& key)
 		{
 			return this->array[this->find_position(key)].element;
 		}
+		/**
+		 * returns a reference to the value stored in the map
+		 *
+		 * \param value
+		 * \return T&
+		 */
 		T& operator[](const T& value)
 		{
 			return this->array[this->find_value(value)].element;
 		}
-
+		/**
+		 * 
+		 * 
+		 * \return int the number of entries in the map
+		 */
 		int size()const
 		{
 			return this->my_size;
@@ -148,7 +216,12 @@ namespace nwacc {
 		}
 
 	private:
-
+		/**
+		 * checks if a number is prime
+		 * 
+		 * \param number
+		 * \return bool
+		 */
 		static bool is_prime(const int number)
 		{
 			if (number == 2 || number == 3) return true;
@@ -158,14 +231,22 @@ namespace nwacc {
 
 			return true;
 		}
-
+		/*!
+		 * give the next prime number in sequence
+		 * 
+		 * \param number
+		 * \return int
+		 */
 		static int next_prime(int number)
 		{
 			if (number % 2 == 0) ++number;
 			while (!is_prime(number)) number += 2;
 			return number;
 		}
-
+		/**
+		 * the definition of an entry in the map
+		 * 
+		 */
 		struct entry
 		{
 			T element;
@@ -179,7 +260,12 @@ namespace nwacc {
 				: element{ std::move(e) }, key{ std::move(k) }, type{ t } { }
 			
 		};
-
+		/**
+		 * gives you information about the state of the given entry
+		 * 
+		 * \param place
+		 * \return string
+		 */
 		std::string get_type(const entry & place) const
 		{
 			if (place.type == kEmpty)
@@ -194,18 +280,38 @@ namespace nwacc {
 
 			return "D";
 		}
-
+		/**
+		 * the vector for storing the entries
+		 * 
+		 */
 		std::vector<entry> array;
-
+		/**
+		 * the current size of the array
+		 * 
+		 */
 		std::size_t current_size;
-
+		/**
+		 * the current number of entries in the map
+		 * 
+		 */
 		int my_size;
-
+		/**
+		 *checks if the current state of an entry is active 
+		 * 
+		 * 
+		 * \param current_position
+		 * \return Bool
+		 */
 		bool is_active(int current_position) const
 		{
 			return this->array[current_position].type == kActive;
 		}
-
+		/**
+		 * finds the index where the given value is stored
+		 * 
+		 * \param value
+		 * \return 
+		 */
 		int find_value(const T& value) const
 		{
 			for (auto entry : this->array)
@@ -217,25 +323,12 @@ namespace nwacc {
 			}
 			return {};
 		}
-
-		int find_position(const T & value) const
-		{
-			auto off_set = 1;
-			auto current_position = this->hash(value);
-
-			while (this->array[current_position].type != kEmpty &&
-				this->array[current_position].element != value)
-			{
-				current_position += off_set;
-				off_set += 2;
-				if (current_position >= this->array.size())
-				{
-					current_position -= this->array.size();
-				} // else, we have not ran outside the size, do_nothing();
-			}
-			return current_position;
-		}
-
+		/**
+		 * finds the index where the given key is stored
+		 *
+		 * \param key
+		 * \return
+		 */
 		int find_position(const K & key) const
 		{
 			auto off_set = 1;
@@ -253,7 +346,10 @@ namespace nwacc {
 			}
 			return current_position;
 		}
-
+		/**
+		 * resizes the array to keep the load below 50%
+		 * 
+		 */
 		void rehash()
 		{
 			auto old_array = this->array;
@@ -273,11 +369,16 @@ namespace nwacc {
 			}
 
 		}
-
-		std::size_t hash(const T & value) const
+		/**
+		 * calculates where in the array the key should be stored
+		 * 
+		 * \param key
+		 * \return 
+		 */
+		std::size_t hash(const K & key) const
 		{
 			static std::hash<T> hash_object;
-			return hash_object(value) % this->array.size();
+			return hash_object(key) % this->array.size();
 		}
 	};
 }
