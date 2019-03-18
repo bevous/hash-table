@@ -16,7 +16,7 @@ namespace nwacc {
 		/**
 		 * initializes the array with the proper size;
 		 * 
-		 * \param size
+		 * @param size
 		 */
 		explicit hash_table(int size = 7) : array(next_prime(size))
 		{
@@ -25,24 +25,24 @@ namespace nwacc {
 		/**
 		 * checks to see is the hashmap contains the given value
 		 * 
-		 * \param value
-		 * \return bool
+		 * @param value
+		 * @return bool
 		 */
 		bool contains_value(const T & value) const
 		{
 			return this->is_active(this->find_value(value));
 		}
 		/**
-		  * checks to see is the hashmap contains the given value
+		  * checks to see is the hash map contains the given value
 		 * 
-		 * \param key
-		 * \return bool 
+		 * @param key
+		 * @return bool 
 		 */
 		bool contains_key(const K & key)
 		{
 			return this->is_active(this->find_position(key));
 		}
-		/*!
+		/**
 		 * empties out the map
 		 * 
 		 */
@@ -57,9 +57,9 @@ namespace nwacc {
 		/**
 		 * inserts the given value into the map
 		 * 
-		 * \param value
-		 * \param key
-		 * \return bool
+		 * @param value
+		 * @param key
+		 * @return bool
 		 */
 		bool insert(const T & value,const K & key)
 		{
@@ -87,9 +87,9 @@ namespace nwacc {
 		/**
 		 * inserts the given value into the map
 		 *
-		 * \param value
-		 * \param key
-		 * \return bool
+		 * @param value
+		 * @param key
+		 * @return bool
 		 */
 		 bool insert(T && value,K && key)
 		 {
@@ -117,8 +117,8 @@ namespace nwacc {
 		 /**
 		  * removes a value from the map
 		  * 
-		  * \param value
-		  * \return bool
+		  * @param value
+		  * @return bool
 		  */
 		bool remove(const T & value)
 		{
@@ -137,8 +137,8 @@ namespace nwacc {
 		 *removes the given key from the map
 		 * 
 		 * 
-		 * \param key
-		 * \return 
+		 * @param key
+		 * @return 
 		 */
 		bool remove(const K & key)
 		{
@@ -156,8 +156,8 @@ namespace nwacc {
 		/**
 		 * returns the value stored with the given key
 		 * 
-		 * \param key
-		 * \return T
+		 * @param key
+		 * @return T
 		 */
 		T get(const K& key)
 		{
@@ -169,26 +169,27 @@ namespace nwacc {
 		 */
 		enum entry_type { kActive, kEmpty, kDeleted };
 		/**
-		 * prints the map to the given out stream
+		 * formats the entries for output 
 		 * 
-		 * \param out
+		 * @returns string
 		 */
-		void print(std::ostream & out = std::cout)
+		std::string print()const
 		{
+			std::string entries;
 			for (auto entry : this->array)
 			{
 				if (entry.type == kActive)
 				{
-					out << entry.element << ", " <<entry.key<<std::endl;
-				}
+					entries += std::to_string(entry.element) + ", " + std::to_string(entry.key) + "\n";
+				}//else, do_nothing()
 			}
-			out << std::endl;
+			return entries;
 		}
 		/**
 		 * returns a reference to the value stored with the key
 		 * 
-		 * \param key
-		 * \return T&
+		 * @param key
+		 * @return T&
 		 */
 		T& operator[](const K& key)
 		{
@@ -197,8 +198,8 @@ namespace nwacc {
 		/**
 		 * returns a reference to the value stored in the map
 		 *
-		 * \param value
-		 * \return T&
+		 * @param value
+		 * @return T&
 		 */
 		T& operator[](const T& value)
 		{
@@ -207,7 +208,7 @@ namespace nwacc {
 		/**
 		 * 
 		 * 
-		 * \return int the number of entries in the map
+		 * @return int the number of entries in the map
 		 */
 		int size()const
 		{
@@ -219,27 +220,27 @@ namespace nwacc {
 		/**
 		 * checks if a number is prime
 		 * 
-		 * \param number
-		 * \return bool
+		 * @param number
+		 * @return bool
 		 */
 		static bool is_prime(const int number)
 		{
-			if (number == 2 || number == 3) return true;
-			if (number == 1 || number % 2 == 0) return false;
+			if (number == 2 || number == 3) return true; //else, do_nothing()
+			if (number == 1 || number % 2 == 0) return false;//else, do_nothing()
 			for (auto counter = 3; counter * counter <= number; counter += 2)
-				if (number % counter == 0) return false;
+				if (number % counter == 0) return false;//else, do_nothing()
 
 			return true;
 		}
-		/*!
+		/**
 		 * give the next prime number in sequence
 		 * 
-		 * \param number
-		 * \return int
+		 * @param number
+		 * @return int
 		 */
 		static int next_prime(int number)
 		{
-			if (number % 2 == 0) ++number;
+			if (number % 2 == 0) ++number;//else, do_nothing()
 			while (!is_prime(number)) number += 2;
 			return number;
 		}
@@ -263,20 +264,20 @@ namespace nwacc {
 		/**
 		 * gives you information about the state of the given entry
 		 * 
-		 * \param place
-		 * \return string
+		 * @param place
+		 * @return string
 		 */
 		std::string get_type(const entry & place) const
 		{
 			if (place.type == kEmpty)
 			{
 				return "E";
-			}
+			}//else, do_nothing()
 			
 			if (place.type == kActive)
 			{
 				return "A";
-			}
+			}//else, do_nothing()
 
 			return "D";
 		}
@@ -289,18 +290,18 @@ namespace nwacc {
 		 * the current size of the array
 		 * 
 		 */
-		std::size_t current_size;
+		std::size_t current_size{};
 		/**
 		 * the current number of entries in the map
 		 * 
 		 */
-		int my_size;
+		int my_size{};
 		/**
 		 *checks if the current state of an entry is active 
 		 * 
 		 * 
-		 * \param current_position
-		 * \return Bool
+		 * @param current_position
+		 * @return Bool
 		 */
 		bool is_active(int current_position) const
 		{
@@ -309,8 +310,8 @@ namespace nwacc {
 		/**
 		 * finds the index where the given value is stored
 		 * 
-		 * \param value
-		 * \return 
+		 * @param value
+		 * @return 
 		 */
 		int find_value(const T& value) const
 		{
@@ -319,15 +320,15 @@ namespace nwacc {
 				if(entry.element == value)
 				{
 					return this->find_position(entry.key);
-				}
+				}//else, do_nothing()
 			}
 			return {};
 		}
 		/**
 		 * finds the index where the given key is stored
 		 *
-		 * \param key
-		 * \return
+		 * @param key
+		 * @return
 		 */
 		int find_position(const K & key) const
 		{
@@ -372,13 +373,26 @@ namespace nwacc {
 		/**
 		 * calculates where in the array the key should be stored
 		 * 
-		 * \param key
-		 * \return 
+		 * @param key
+		 * @return 
 		 */
 		std::size_t hash(const K & key) const
 		{
 			static std::hash<T> hash_object;
 			return hash_object(key) % this->array.size();
+		}
+
+		/**
+		 *formats the map for output to an ostream.
+		 *@param out
+		 *@param rhs
+		 *@returns ostream&
+		 */
+		friend std::ostream & operator<< (std::ostream & out, const hash_table &rhs)
+		{
+			std::string temp = rhs.print();
+			out << temp;
+			return out;
 		}
 	};
 }
